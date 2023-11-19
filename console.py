@@ -143,25 +143,24 @@ class HBNBCommand(cmd.Cmd):
             print("** class doesn't exist **")
             return
         new_instance = HBNBCommand.classes[parse_args[0]]()
-        print(f"arguments: \n ")
+        # print(f"arguments: \n ")
         for i in parse_args[1:]:
             st_index = i.find("=")
             if (i == -1):
                 continue
             key = i[:st_index]
-            value = i[st_index:]
+            value = i[st_index + 1:]
             value = value.replace("_", " ")
             if (not value):
                 continue
-            value = value[1:]
             if (not value.startswith("\"") and not value.endswith("\"")):
                 value = derive_type_from_string(value)(value)
             else:
                 if (not (len(value) > 3)):
                     continue
                 else:
-                    value = value[2:-1]
-            print(f"key: {key} \t value: {value} , type: {type(value)}")
+                    value = value[1:-1]
+            # print(f"key: {key} \t value: {value} , type: {type(value)}")
             setattr(new_instance, str(key), value)
         storage.save()
         print(new_instance.id)
@@ -364,6 +363,7 @@ class HBNBCommand(cmd.Cmd):
         """ Help information for the update class """
         print("Updates an object with new information")
         print("Usage: update <className> <id> <attName> <attVal>\n")
+
 
 if __name__ == "__main__":
     HBNBCommand().cmdloop()
