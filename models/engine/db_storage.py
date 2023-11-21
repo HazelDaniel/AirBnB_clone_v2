@@ -1,17 +1,13 @@
 #!/usr/bin/env python3
-from models import User, City, Place, State, Review, Amenity
 from models.base_model import Base
 from os import getenv
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
 
 
-name_to_class_mapper = {"User": User, "City": City, "Place": Place,
-                        "State": State, "Review": Review, "Amenity": Amenity}
-
 dialect, driver = "mysql", "mysqldb"
 user, password = getenv("HBNB_MYSQL_USER"), getenv("HBNB_MYSQL_PWD")
-host, db_url = getenv("HBNB_MYSQL_HOST"), getenv("HBNB_MYSQL_DB")
+host, db_name = getenv("HBNB_MYSQL_HOST"), getenv("HBNB_MYSQL_DB")
 hbnb_env = getenv("HBNB_ENV")
 
 metadata = None
@@ -24,8 +20,9 @@ class DBStorage:
 
     def __init__(self):
         """a constructor function for the DBStorage class"""
-        connection_url = f"{dialect}+{driver}://{user}:"
-        f"{password}@{host}/{db_url}"
+        # connection_url = f"{dialect}+{driver}://{user}:"
+        # f"{password}@{host}/{db_name}"
+        connection_url = f"mysql+mysqldb://{user}:{password}@{host}:3306/{db_name}"
         DBStorage.__engine = create_engine(connection_url, pool_pre_ping=True)
         global metadata
         metadata = Base.metadata
@@ -37,6 +34,9 @@ class DBStorage:
             a dict of all objects in the query """
         if not DBStorage.__session:
             return {}
+        from models import User, City, Place, State, Review, Amenity
+        name_to_class_mapper = {"User": User, "City": City, "Place": Place,
+                                "State": State, "Review": Review, "Amenity": Amenity}
         if not cls:
             users = DBStorage.__session.query(User).all()
             cities = DBStorage.__session.query(City).all()
@@ -57,17 +57,20 @@ class DBStorage:
 
     def new(self, obj):
         """adds the object to the current database session"""
-        self.__session.add(obj)
+        if (self.__session):
+            self.__session.add(obj)
 
     def save(self):
         """commits all changes of the current database session"""
-        self.__session.commit()
+        if (self.__session):
+            self.__session.commit()
 
     def delete(self, obj):
         """delete from the current database session obj if not None"""
         if not obj:
             return
-        self.__session.delete(obj)
+        if (self.__session):
+            self.__session.delete(obj)
 
     def reload(self):
         """creates all tables in the database"""
