@@ -162,9 +162,9 @@ class HBNBCommand(cmd.Cmd):
                     value = value[1:-1]
             # print(f"key: {key} \t value: {value} , type: {type(value)}")
             setattr(new_instance, str(key), value)
+        storage.new(new_instance)
         storage.save()
         print(new_instance.id)
-        storage.save()
 
     def help_create(self):
         """ Help information for the create method """
@@ -267,7 +267,7 @@ class HBNBCommand(cmd.Cmd):
     def do_count(self, args):
         """Count current number of class instances"""
         count = 0
-        for k, v in storage._FileStorage__objects.items():
+        for k, v in storage.all().items():
             if args == k.split('.')[0]:
                 count += 1
         print(count)

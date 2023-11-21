@@ -20,9 +20,7 @@ class DBStorage:
 
     def __init__(self):
         """a constructor function for the DBStorage class"""
-        # connection_url = f"{dialect}+{driver}://{user}:"
-        # f"{password}@{host}/{db_name}"
-        connection_url = f"mysql+mysqldb://{user}:{password}@{host}:3306/{db_name}"
+        connection_url = f"mysql+mysqldb://{user}:{password}@{host}/{db_name}"
         DBStorage.__engine = create_engine(connection_url, pool_pre_ping=True)
         global metadata
         metadata = Base.metadata
