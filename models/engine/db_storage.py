@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+"""a module that holds the implementation of a dbstorage engine"""
 from models.base_model import Base
 from os import getenv
 from sqlalchemy import create_engine
@@ -39,7 +40,8 @@ class DBStorage:
         from models.review import Review
         from models.amenity import Amenity
         name_to_class_mapper = {"User": User, "City": City, "Place": Place,
-                                "State": State, "Review": Review, "Amenity": Amenity}
+                                "State": State, "Review": Review,
+                                "Amenity": Amenity}
         if not cls:
             cls_list = name_to_class_mapper.values()
             res_list = []

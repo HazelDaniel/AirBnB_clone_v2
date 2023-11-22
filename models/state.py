@@ -19,6 +19,6 @@ class State(BaseModel, Base):
     @property
     def cities(self):
         if (storage_type == "file"):
-            state_id_mapper = lambda x: x.state_id == self.id
-            return map(state_id_mapper, storage.all().values())
+            return map(lambda x: x.state_id == self.id,
+                       storage.all().values())
         return None
