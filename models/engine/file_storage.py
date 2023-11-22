@@ -20,8 +20,6 @@ class FileStorage:
         """Adds new object to storage dictionary"""
         if not obj:
             return
-        if "_sa_instance_state" in obj.__dict__:
-            obj.__dict__.pop("_sa_instance_state")
         self.all().update({obj.to_dict()['__class__'] + '.' + obj.id: obj})
 
     def save(self):

@@ -50,8 +50,6 @@ class DBStorage:
                 res = self.__session.query(entry).all()
                 res_list.extend(res)
             for entry in res_list:
-                if "_sa_instance_state" in entry.__dict__:
-                    entry.__dict__.pop("_sa_instance_state")
                 if '__class__' in entry.__dict__:
                     res_dict[f"{entry.__dict__['__class__']}"
                              f".{entry.id}"] = entry
@@ -65,8 +63,6 @@ class DBStorage:
             res = self.__session.query(name_to_class_mapper[cls]).all()
             res_dict = {}
             for entry in res:
-                if "_sa_instance_state" in entry.__dict__:
-                    entry.__dict__.pop("_sa_instance_state")
                 res_dict[f"{cls}.{entry.id}"] = entry
             # res_dict = {f"{cls}.{entry.id}": entry
             #             for entry in res}
