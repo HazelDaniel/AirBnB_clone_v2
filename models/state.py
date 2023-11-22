@@ -10,7 +10,7 @@ storage_type = getenv("HBNB_TYPE_STORAGE")
 
 
 class State(BaseModel, Base):
-    """ State class """
+    """ the class implementation of states table """
     __tablename__ = "states"
     name = Column(String(128), nullable=False)
     if storage_type == "db":
@@ -18,7 +18,9 @@ class State(BaseModel, Base):
 
     @property
     def cities(self):
+        """returns the list of City instances
+            with state_id equals to the current State.id"""
         if (storage_type == "file"):
             return map(lambda x: x.state_id == self.id,
-                       storage.all().values())
+                       storage.all("City").values())
         return None
