@@ -53,9 +53,6 @@ class DBStorage:
                 if '__class__' in entry.__dict__:
                     res_dict[f"{entry.__dict__['__class__']}"
                              f".{entry.id}"] = entry
-            # res_dict = {f"{entry.__dict__['__class__']}.{entry.id}":
-            #             entry
-            #             for entry in res_list}
             return res_dict
         else:
             if cls not in name_to_class_mapper:
