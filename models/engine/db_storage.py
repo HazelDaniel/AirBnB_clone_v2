@@ -26,7 +26,7 @@ class DBStorage:
         global metadata
         metadata = Base.metadata
         if (hbnb_env == "test"):
-            metadata.drop_all()
+            metadata.drop_all(self.__engine)
 
     def all(self, cls=None):
         """ this querys the db session and returns
@@ -45,18 +45,31 @@ class DBStorage:
         if not cls:
             cls_list = name_to_class_mapper.values()
             res_list = []
+            res_dict = {}
             for entry in cls_list:
                 res = self.__session.query(entry).all()
                 res_list.extend(res)
-            res_dict = {f"{entry.__dict__['__class__']}.{entry.id}": entry
-                        for entry in res_list}
+            for entry in res_list:
+                if "_sa_instance_state" in entry.__dict__:
+                    entry.__dict__.pop("_sa_instance_state")
+                if '__class__' in entry.__dict__:
+                    res_dict[f"{entry.__dict__['__class__']}"
+                             f".{entry.id}"] = entry
+            # res_dict = {f"{entry.__dict__['__class__']}.{entry.id}":
+            #             entry
+            #             for entry in res_list}
             return res_dict
         else:
             if cls not in name_to_class_mapper:
                 return {}
             res = self.__session.query(name_to_class_mapper[cls]).all()
-            res_dict = {f"{cls}.{entry.id}": entry
-                        for entry in res}
+            res_dict = {}
+            for entry in res:
+                if "_sa_instance_state" in entry.__dict__:
+                    entry.__dict__.pop("_sa_instance_state")
+                res_dict[f"{cls}.{entry.id}"] = entry
+            # res_dict = {f"{cls}.{entry.id}": entry
+            #             for entry in res}
             return res_dict
 
     def new(self, obj):
