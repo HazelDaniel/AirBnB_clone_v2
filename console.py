@@ -143,7 +143,6 @@ class HBNBCommand(cmd.Cmd):
             print("** class doesn't exist **")
             return
         new_instance = HBNBCommand.classes[parse_args[0]]()
-        # print(f"arguments: \n ")
         for i in parse_args[1:]:
             st_index = i.find("=")
             if (i == -1):
@@ -160,7 +159,6 @@ class HBNBCommand(cmd.Cmd):
                     continue
                 else:
                     value = value[1:-1]
-            # print(f"key: {key} \t value: {value} , type: {type(value)}")
             setattr(new_instance, str(key), value)
         storage.new(new_instance)
         storage.save()
@@ -252,7 +250,7 @@ class HBNBCommand(cmd.Cmd):
                          value in storage.all().items()}
         else:
             res_insts = {key: value for key,
-                         value in storage.all().items()
+                         value in storage.all(cls_name).items()
                          if key.startswith(cls_name)}
         res_array = []
         for key, value in res_insts.items():

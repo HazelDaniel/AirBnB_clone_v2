@@ -30,26 +30,30 @@ class DBStorage:
     def all(self, cls=None):
         """ this querys the db session and returns
             a dict of all objects in the query """
-        if not DBStorage.__session:
+        if not self.__session:
             return {}
-        from models import User, City, Place, State, Review, Amenity
+        from models.user import User
+        from models.city import City
+        from models.place import Place
+        from models.state import State
+        from models.review import Review
+        from models.amenity import Amenity
         name_to_class_mapper = {"User": User, "City": City, "Place": Place,
                                 "State": State, "Review": Review, "Amenity": Amenity}
         if not cls:
-            users = DBStorage.__session.query(User).all()
-            cities = DBStorage.__session.query(City).all()
-            states = DBStorage.__session.query(State).all()
-            reviews = DBStorage.__session.query(Review).all()
-            amenities = DBStorage.__session.query(Amenity).all()
-            res = [*amenities, *cities, *reviews, *states, *users]
+            cls_list = name_to_class_mapper.values()
+            res_list = []
+            for entry in cls_list:
+                res = self.__session.query(entry).all()
+                res_list.extend(res)
             res_dict = {f"{entry.__dict__['__class__']}.{entry.id}": entry
-                        for entry in res}
+                        for entry in res_list}
             return res_dict
         else:
             if cls not in name_to_class_mapper:
                 return []
-            res = DBStorage.__session.query(name_to_class_mapper[cls]).all()
-            res_dict = {f"{entry.__dict__['__class__']}.{entry.id}": entry
+            res = self.__session.query(name_to_class_mapper[cls]).all()
+            res_dict = {f"{cls}.{entry.id}": entry
                         for entry in res}
             return res_dict
 
@@ -73,6 +77,16 @@ class DBStorage:
     def reload(self):
         """creates all tables in the database"""
         if metadata:
+            """this is to avoid circular imports that
+                would be triggered if we were to import from models
+                package directly"""
+            from models.user import User
+            from models.city import City
+            from models.place import Place
+            from models.state import State
+            from models.review import Review
+            from models.amenity import Amenity
             metadata.create_all(bind=self.__engine)
-        self.__session = scoped_session(sessionmaker(bind=self.__engine,
-                                                     expire_on_commit=False))()
+            self.__session =\
+                scoped_session(sessionmaker(bind=self.__engine,
+                                            expire_on_commit=False))()
