@@ -53,7 +53,7 @@ class DBStorage:
             return res_dict
         else:
             if cls not in name_to_class_mapper:
-                return []
+                return {}
             res = self.__session.query(name_to_class_mapper[cls]).all()
             res_dict = {f"{cls}.{entry.id}": entry
                         for entry in res}

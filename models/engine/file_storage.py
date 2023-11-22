@@ -10,15 +10,11 @@ class FileStorage:
 
     def all(self, cls=None):
         """Returns a dictionary of models currently in storage"""
-        def type_check(obj=None):
-            if type(obj) == cls:
-                return True
-            return False
         if not cls:
             return FileStorage.__objects
         else:
             return {key: value for key, value in
-                    FileStorage.__objects.items() if type_check(value)}
+                    FileStorage.__objects.items() if key.startswith(cls)}
 
     def new(self, obj):
         """Adds new object to storage dictionary"""
