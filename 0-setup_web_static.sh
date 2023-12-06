@@ -4,13 +4,20 @@
 sudo su root -
 sudo apt-get update
 sudo apt-get install nginx
-sudo mkdir /data
+sudo mkdir -p /data
 sudo mkdir -p /data/web_static
 sudo mkdir -p /data/web_static/releases
 sudo mkdir -p /data/web_static/shared
 sudo mkdir -p /data/web_static/releases/test
 sudo touch /data/web_static/releases/test/index.html
-echo "this is the test page" > /data/web_static/releases/test/index.html
+printf %s "<html>
+  <head>
+  </head>
+  <body>
+    Holberton School
+  </body>
+</html>
+" > /data/web_static/releases/test/index.html
 sudo ln -sf /data/web_static/releases/test/ /data/web_static/current
 sudo chown -R ubuntu:ubuntu /data/
 
@@ -19,7 +26,13 @@ printf %s "server {
     listen [::]:80 default_server;
     add_header X-Served-By $HOSTNAME;
     root   /var/www/html;
-    index  index.html index.htm;
+    index  index.html index.htm index-nginx-debian.html;
+		try_files \$uri \$uri\ =404;
+
+		location / {
+			root /var/www/html;
+			index  index.html index.htm index-nginx-debian.html;
+		}
 
     location /hbnb_static {
         alias /data/web_static/current;
@@ -35,6 +48,6 @@ printf %s "server {
       root /var/www/html;
       internal;
     }
-}" > /etc/nginx/sites-available/default
+}" | sudo tee /etc/nginx/sites-available/default
 
-service nginx restart
+sudo service nginx restart
