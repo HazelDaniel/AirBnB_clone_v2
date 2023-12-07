@@ -9,8 +9,8 @@ from fabric.api import local
 def do_pack():
     """ this function creates a tar gzipped archive"""
     dt = datetime.utcnow()
-    file = f"versions/web_static_{dt.year}"
-    f"{dt.month}{dt.day}{dt.hour}{dt.minute}{dt.second}.tgz"
+    file = f"versions/web_static_{dt.year}"\
+        f"{dt.month}{dt.day}{dt.hour}{dt.minute}{dt.second}.tgz"
     if not os.path.isdir("versions"):
         if local("mkdir -p versions").failed:
             return None
