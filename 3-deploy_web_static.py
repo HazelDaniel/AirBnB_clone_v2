@@ -27,11 +27,8 @@ def do_deploy(archive_path):
         arc = archive_path.split("/")
         base = arc[1].strip('.tgz')
         put(archive_path, remote_path='/tmp/')
-        print("we got here")
-        print(f"mkdir -p /data/web_static/releases/{base}")
         sudo(f"mkdir -p /data/web_static/releases/{base}")
         main = f"/data/web_static/releases/{base}"
-        print(f"tar -xzf /tmp/{arc[1]} -C {main}/")
         sudo(f"tar -xzf /tmp/{arc[1]} -C {main}/")
         sudo(f"rm /tmp/{arc[1]}")
         sudo(f"mv {main}/web_static/* {main}/")

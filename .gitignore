@@ -1,3 +1,5 @@
 file.json
 test-console
 main-*
+versions
+**/*__pycache__
