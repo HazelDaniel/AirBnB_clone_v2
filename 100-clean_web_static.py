@@ -26,7 +26,6 @@ def do_pack():
 def do_deploy(archive_path):
     """ this distributes an archive to my web servers """
     if not os.path.exists(archive_path):
-        print(f"{archive_path}: does not exist")
         return False
     try:
         arc = archive_path.split("/")
@@ -60,12 +59,12 @@ def do_clean(number=0):
             local("ls -lv | rev | cut -f 1 | rev | \
             head -n +1 | xargs -d '\n' rm -rf")
         with cd('/data/web_static/releases/'):
-            run("sudo ls -lv | rev | cut -f 1 | \
+            sudo("ls -lv | rev | cut -f 1 | \
             rev | head -n +1 | xargs -d '\n' rm -rf")
     else:
         with lcd('./versions/'):
             local("ls -lv | rev | cut -f 1 | rev |" +
                   f"head -n +{number} | xargs -d '\n' rm -rf")
         with cd('/data/web_static/releases/'):
-            run("sudo ls -lv | rev | cut -f 1 |" +
-                f"rev | head -n +{number} | xargs -d '\n' rm -rf")
+            sudo("ls -lv | rev | cut -f 1 |" +
+                 f"rev | head -n +{number} | xargs -d '\n' rm -rf")
