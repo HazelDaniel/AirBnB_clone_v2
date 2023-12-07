@@ -17,7 +17,7 @@ printf %s "<html>
     Holberton School
   </body>
 </html>
-" > /data/web_static/releases/test/index.html
+" | sudo tee /data/web_static/releases/test/index.html
 sudo ln -sf /data/web_static/releases/test/ /data/web_static/current
 sudo chown -R ubuntu:ubuntu /data/
 
@@ -28,6 +28,7 @@ printf %s "server {
     root   /var/www/html;
     index  index.html index.htm index-nginx-debian.html;
 		try_files \$uri \$uri\ =404;
+		rewrite ^/redirect_me https://www.youtube.com/ permanent;
 
 		location / {
 			root /var/www/html;
@@ -37,10 +38,6 @@ printf %s "server {
     location /hbnb_static {
         alias /data/web_static/current;
         index index.html index.htm;
-    }
-
-    location /redirect_me {
-        return 301 http://cuberule.com/;
     }
 
     error_page 404 /404.html;
