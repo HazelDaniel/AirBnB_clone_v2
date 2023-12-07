@@ -3,7 +3,7 @@
 
 sudo su root -
 sudo apt-get update
-sudo apt-get install nginx
+sudo apt-get install nginx -y
 sudo mkdir -p /data
 sudo mkdir -p /data/web_static
 sudo mkdir -p /data/web_static/releases
