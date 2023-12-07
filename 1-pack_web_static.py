@@ -13,7 +13,7 @@ def do_pack():
     f"{dt.month}{dt.day}{dt.hour}{dt.minute}{dt.second}.tgz"
     if not os.path.isdir("versions"):
         if local("mkdir -p versions").failed:
-            return
+            return None
     if local(f"tar -cvzf {file} web_static").failed:
-        return
+        return None
     return file
