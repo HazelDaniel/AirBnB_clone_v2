@@ -28,6 +28,10 @@ file {'/data/web_static/releases/test/index.html':
   require => File['/data/web_static/current']
 }
 
+exec {'login as root':
+  command => 'sudo su root -',
+}->
+
 exec { 'changing ownership of /data':
   command => 'chown -R ubuntu:ubuntu /data/',
   path    => '/usr/bin/:/usr/local/bin/:/bin/',
@@ -43,5 +47,7 @@ service {'nginx':
   ensure  => running,
 }
 
+
 exec {'/etc/init.d/nginx restart':
+  before  => Exec['login as root'],
 }
