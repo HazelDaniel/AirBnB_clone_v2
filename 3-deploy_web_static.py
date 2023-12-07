@@ -6,7 +6,7 @@ import os.path
 
 env.user = 'ubuntu'
 env.hosts = ["54.197.123.187", "18.210.17.238"]
-env.key_filename = "~/Documents/ALX/credentials/alx_ubuntu_server"
+env.key_filename = "~/id_rsa"
 
 
 def deploy():
