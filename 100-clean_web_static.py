@@ -54,17 +54,29 @@ def deploy():
 
 def do_clean(number=0):
     """ this cleans the old archives leaving n amount of items behind"""
+    number = int(number)
     if number in [0, 1]:
         with lcd('./versions/'):
-            local("ls -lv | rev | cut -f 1 | rev | \
-            head -n +1 | xargs -d '\n' rm -rf")
+            local_entries = local("ls -t1r | head -n -1", capture=True)
+            local_entries = local_entries.split("\n")
+            result_arg = ' '.join(local_entries)
+            # print("local entries")
+            # print(local_entries)
+            local(f"rm -rf {result_arg}")
         with cd('/data/web_static/releases/'):
-            sudo("ls -lv | rev | cut -f 1 | \
-            rev | head -n +1 | xargs -d '\n' rm -rf")
+            local_entries = local("ls -t1r | head -n -1", capture=True)
+            local_entries = local_entries.split("\n")
+            result_arg = ' '.join(local_entries)
     else:
         with lcd('./versions/'):
-            local("ls -lv | rev | cut -f 1 | rev |" +
-                  f"head -n +{number} | xargs -d '\n' rm -rf")
+            local_entries = local("ls -t1r", capture=True)
+            """this assumes that the naming of files has no space in it"""
+            local_entries = local_entries.split("\n")
+            result_arg = ' '.join(local_entries[: -number])
+            local("rm -rf {result_arg}")
         with cd('/data/web_static/releases/'):
-            sudo("ls -lv | rev | cut -f 1 |" +
-                 f"rev | head -n +{number} | xargs -d '\n' rm -rf")
+            remote_entries = run("ls -t1r")
+            """this assumes that the naming of files has no space in it"""
+            remote_entries = remote_entries.split("\n")
+            result_arg = ' '.join(remote_entries[: -number])
+            sudo("rm -rf {result_arg}")
