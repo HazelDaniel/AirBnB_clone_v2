@@ -5,7 +5,7 @@ from fabric.api import local, put, run, env, cd, lcd, sudo
 import os
 
 env.user = 'ubuntu'
-env.hosts = ['35.227.35.75', '100.24.37.33']
+env.hosts = ['54.197.123.187', '18.210.17.238']
 
 
 def do_pack():
@@ -60,8 +60,6 @@ def do_clean(number=0):
             local_entries = local("ls -t1r | head -n -1", capture=True)
             local_entries = local_entries.split("\n")
             result_arg = ' '.join(local_entries)
-            # print("local entries")
-            # print(local_entries)
             local(f"rm -rf {result_arg}")
         with cd('/data/web_static/releases/'):
             local_entries = local("ls -t1r | head -n -1", capture=True)
