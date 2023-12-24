@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-""" State Module for HBNB project """
+""" State Module for HBNBproject """
 from os import getenv
 from models.base_model import BaseModel, Base
 from sqlalchemy import Column, String
@@ -23,5 +23,5 @@ else:
         def cities(self):
             """returns the list of City instances
                 with state_id equals to the current State.id"""
-            return map(lambda x: x.state_id == self.id,
-                       storage.all("City").values())
+            return list(filter(lambda x: x.state_id == self.id,
+                               storage.all("City").values()))
