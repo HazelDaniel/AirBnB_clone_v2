@@ -2,6 +2,8 @@
 """ Console Module """
 import cmd
 import sys
+
+from sqlalchemy.orm import class_mapper
 from models.base_model import BaseModel
 from models.__init__ import storage
 from models.user import User
@@ -265,9 +267,13 @@ class HBNBCommand(cmd.Cmd):
     def do_count(self, args):
         """Count current number of class instances"""
         count = 0
-        for k, v in storage.all().items():
-            if args == k.split('.')[0]:
-                count += 1
+        if (args):
+            for k, v in storage.all(args).items():
+                if args == k.split('.')[0]:
+                    count += 1
+        else:
+            count = len(storage.all().items())
+
         print(count)
 
     def help_count(self):

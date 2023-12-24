@@ -33,6 +33,8 @@ class Place(BaseModel, Base):
     """A place to stay"""
 
     __tablename__ = "places"
+    from models.amenity import Amenity
+    from models.review import Review
     if env_value == "db":
         city_id = Column(String(60), ForeignKey("cities.id"), nullable=False)
         user_id = Column(String(60), ForeignKey("users.id"), nullable=False)
@@ -51,7 +53,6 @@ class Place(BaseModel, Base):
             back_populates="place_amenities",
             viewonly=False,
         )
-
     else:
         city_id = ""
         user_id = ""
@@ -68,7 +69,7 @@ class Place(BaseModel, Base):
         @property
         def reviews(self):
             from models.__init__ import storage
-            from models.amenity import Review
+            from models.review import Review
 
             obj_list = []
             strg = storage.all("Review")
