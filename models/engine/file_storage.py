@@ -13,8 +13,12 @@ class FileStorage:
         if not cls:
             return FileStorage.__objects
         else:
+            if (type(cls) == str):
+                return {key: value for key, value in
+                        FileStorage.__objects.items() if key.startswith(cls)}
             return {key: value for key, value in
-                    FileStorage.__objects.items() if key.startswith(cls.__name__)}
+                    FileStorage.__objects.items()
+                    if key.startswith(cls.__name__)}
 
     def new(self, obj):
         """Adds new object to storage dictionary"""
