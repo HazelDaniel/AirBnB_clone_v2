@@ -24,7 +24,5 @@ else:
         def cities(self):
             """returns the list of City instances
                 with state_id equals to the current State.id"""
-            if (storage_type == "file"):
-                return map(lambda x: x.state_id == self.id,
-                           storage.all("City").values())
-            return None
+            return map(lambda x: x.state_id == self.id,
+                       storage.all("City").values())

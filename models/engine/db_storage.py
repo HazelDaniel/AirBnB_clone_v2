@@ -55,14 +55,22 @@ class DBStorage:
                              f".{entry.id}"] = entry
             return res_dict
         else:
-            if cls not in name_to_class_mapper:
-                return {}
-            res = self.__session.query(name_to_class_mapper[cls]).all()
-            res_dict = {}
-            for entry in res:
-                res_dict[f"{cls}.{entry.id}"] = entry
-            # res_dict = {f"{cls}.{entry.id}": entry
-            #             for entry in res}
+            if not (type(cls) == str):
+                if cls.__name__ not in name_to_class_mapper:
+                    return {}
+                res = self.__session.query(name_to_class_mapper
+                                           [cls.__name__]).all()
+                res_dict = {}
+                for entry in res:
+                    res_dict[f"{cls}.{entry.id}"] = entry
+            else:
+                if cls not in name_to_class_mapper:
+                    return {}
+                res = self.__session.query(name_to_class_mapper
+                                           [cls]).all()
+                res_dict = {}
+                for entry in res:
+                    res_dict[f"{cls}.{entry.id}"] = entry
             return res_dict
 
     def new(self, obj):
@@ -98,3 +106,9 @@ class DBStorage:
             self.__session =\
                 scoped_session(sessionmaker(bind=self.__engine,
                                             expire_on_commit=False))()
+
+    def close(self):
+        """makes a call to the reload method in order to close
+            the current db session"""
+        if self.__session:
+            self.__session.remove()
