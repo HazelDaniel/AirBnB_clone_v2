@@ -3,3 +3,4 @@ test-console
 main-*
 versions
 **/*__pycache__
+main_*

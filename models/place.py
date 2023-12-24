@@ -88,6 +88,7 @@ class Place(BaseModel, Base):
             for value in strg:
                 if self.id == value.id:
                     obj_list.append(value)
+            Place.amenities = obj_list
             return obj_list
 
         @amenities.setter
