@@ -1,0 +1,14 @@
+<!DOCTYPE HTML>
+<HTML lang="en">
+	<HEAD>
+		<TITLE>Document</TITLE>
+	</HEAD>
+	<BODY>
+		<H1>States</H1>
+		{% for state in states %}
+		{% if state %}
+		<LI>{{state[0]}}: <B>{{state[1].name}}</B><LI>
+		{% endif %}
+		{% endfor %}
+	</BODY>
+</HTML>

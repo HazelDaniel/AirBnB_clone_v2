@@ -50,9 +50,9 @@ class DBStorage:
                 res = self.__session.query(entry).all()
                 res_list.extend(res)
             for entry in res_list:
-                if '__class__' in entry.__dict__:
-                    res_dict[f"{entry.__dict__['__class__']}"
-                             f".{entry.id}"] = entry
+                x = entry
+                res_dict[f"{entry.to_dict()['__class__']}"
+                         f".{entry.id}"] = x.__str__()
             return res_dict
         else:
             if not (type(cls) == str):
@@ -111,4 +111,4 @@ class DBStorage:
         """makes a call to the reload method in order to close
             the current db session"""
         if self.__session:
-            self.__session.remove()
+            self.__session.close()
