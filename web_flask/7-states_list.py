@@ -3,11 +3,14 @@
 from flask import Flask, render_template
 from markupsafe import escape
 import os
-current_directory = os.getenv("PWD")
+import subprocess
 
+current_directory = os.getenv("PWD")
 storage = None
+executable_path = f"{current_directory}/dump_fix.sh"
 storage_type = os.getenv("HBNB_TYPE_STORAGE")
 app = Flask(__name__)
+subprocess.run(['bash', 'dump_fix.sh'])
 if current_directory:
     import sys
     current_directory = current_directory.split('/')
