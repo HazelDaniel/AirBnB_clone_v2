@@ -19,7 +19,7 @@ if current_directory:
     flask_directory = (f"{old_directory}/web_flask")
     sys.path.append(current_directory)
     sys.path.append(flask_directory)
-    subprocess.run(['bash', f"{flask_directory}/dump_fix.sh"])
+    subprocess.run(['bash', f"{flask_directory}/dump_fix.sh", '7-dump.sql'])
     from models import storage
     from models.state import State
     from models.city import City

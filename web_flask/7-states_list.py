@@ -10,7 +10,7 @@ storage = None
 executable_path = f"{current_directory}/dump_fix.sh"
 storage_type = os.getenv("HBNB_TYPE_STORAGE")
 app = Flask(__name__)
-subprocess.run(['bash', 'dump_fix.sh'])
+subprocess.run(['bash', 'dump_fix.sh', '7-dump.sql'])
 if current_directory:
     import sys
     current_directory = current_directory.split('/')

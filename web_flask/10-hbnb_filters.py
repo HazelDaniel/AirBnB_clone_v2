@@ -22,6 +22,8 @@ if current_directory:
     subprocess.run(['bash', f"{flask_directory}/dump_fix.sh", '7-dump.sql'])
     from models import storage
     from models.state import State
+    from models.city import City
+    from models.amenity import Amenity
 
 if storage:
     @app.route('/', strict_slashes=False)
@@ -72,7 +74,7 @@ if storage:
     @app.route('/cities_by_states')
     def handle_state_cities_list():
         """this is the route handler for the /states_list endpoint"""
-        all_states = storage.all(State)
+        all_states = storage.all('State')
         for value in all_states.values():
             # value.cities = sorted(value.cities, key=lambda x: x[1].name)
             if value.cities:
@@ -80,6 +82,46 @@ if storage:
         all_states = sorted(all_states.items(), key=lambda x: x[1].name)
 
         return render_template('8-cities_by_states.html', states=all_states)
+
+    @app.route("/states", strict_slashes=False)
+    def states():
+        """route handler for /states endpoint"""
+        states = storage.all('State')
+        states = dict(sorted(states.items(), key=lambda item: item[1].name))
+        return render_template('9-states.html',
+                               not_found=False, data=states, id=None)
+
+    @app.route("/states/<id>", strict_slashes=False)
+    def states_id(id):
+        """the route handler for the endpoint /statses/[slug]"""
+        state = storage.search(State, id=id)
+        if state is None:
+            return render_template('9-states.html',
+                                   not_found=True, data=states)
+        c = storage.all('City')
+        cities = {}
+        for key, city in c.items():
+            if state.id == city.state_id:
+                cities[key] = city
+        cities = sorted(cities.items(), key=lambda item: item[1].name)
+        return render_template('9-states.html', name=state.name,
+                               not_found=False, cities=cities, id=1)
+
+    @app.route("/hbnb_filters", strict_slashes=False)
+    def hbnb_filter():
+        res_data = {}
+        states = storage.all('State')
+        cities = storage.all('City')
+        amenities = storage.all('Amenity')
+        states = sorted(states.items(), key=lambda item: item[1].name)
+        cities = sorted(cities.items(), key=lambda item: item[1].name)
+        amenities = sorted(amenities.items(), key=lambda item: item[1].name)
+        res_data["cities"] = cities
+        res_data["states"] = states
+        res_data["amenities"] = amenities
+        for value in res_data["states"]:
+            print(f"states: {value}")
+        return render_template('10-hbnb_filters.html', data=res_data)
 
     def teardown_requests(exception=None):
         """this is the teardown function to be executed in the"""
