@@ -80,6 +80,24 @@ if storage:
 
         return render_template('8-cities_by_states.html', states=all_states)
 
+    @app.route('/states/<id>')
+    def handle_states_by_id(id):
+        """this is the route handler for the /states/[slug] endpoint"""
+        input_id = escape(id)
+        all_states = storage.all('State')
+        match_state = None
+        for v in all_states.values():
+            if v.id == id:
+                match_state = v
+        print(f"this is the matched state : {match_state}")
+        for value in all_states.values():
+            # value.cities = sorted(value.cities, key=lambda x: x[1].name)
+            if value.cities:
+                value.cities = sorted(value.cities, key=lambda x: x.name)
+        all_states = sorted(all_states.items(), key=lambda x: x[1].name)
+
+        return render_template('8-cities_by_states.html', states=all_states)
+
     def teardown_requests(exception=None):
         """this is the teardown function to be executed in the"""
         storage.close()
