@@ -71,6 +71,19 @@ class FileStorage:
         except FileNotFoundError:
             pass
 
+    def search(self, cls=None, **kwargs):
+        """  """
+        objs = self.all(cls)
+        for key, obj in objs:
+            flag = 0
+            for attr, value in kwargs:
+                if obj.get(attr) != value:
+                    flag = 1
+                    break
+            if flag == 0:
+                return obj
+        return None
+
     def close(self):
         """This makes call to the reload method in order to
         deserialize json file to objects"""

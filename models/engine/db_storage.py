@@ -105,7 +105,21 @@ class DBStorage:
             metadata.create_all(bind=self.__engine)
             self.__session =\
                 scoped_session(sessionmaker(bind=self.__engine,
-                                            expire_on_commit=False))()
+                                            expire_on_commit=False))
+
+    def search(self, cls=None, **kwargs):
+        """this searches for the objects that
+            correspond to this value in the object storage"""
+        objs = self.all(cls)
+        for key, obj in objs.items():
+            flag = 0
+            for attr, value in kwargs.items():
+                if getattr(obj, attr) != value:
+                    flag = 1
+                    break
+            if flag == 0:
+                return obj
+        return None
 
     def close(self):
         """makes a call to the reload method in order to close
