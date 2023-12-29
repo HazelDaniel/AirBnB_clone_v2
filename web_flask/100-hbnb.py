@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 """a module that starts a flask web application on 0.0.0.0 port 5000"""
-from flask import Flask, render_template
+from flask import Flask, render_template, Markup
 from markupsafe import escape
 import os
 import subprocess
@@ -31,11 +31,6 @@ if storage:
     def index():
         """a route handler for the root route"""
         return "Hello HBNB!"
-
-    @app.route('/hbnb', strict_slashes=False)
-    def hbnb_route():
-        """a route handler for the /hbnb"""
-        return "HBNB"
 
     @app.route('/c/<text>', strict_slashes=False)
     def c_route(text):
@@ -124,6 +119,34 @@ if storage:
         for value in res_data["states"]:
             print(f"states: {value}")
         return render_template('10-hbnb_filters.html', data=res_data)
+
+    @app.route("/hbnb", strict_slashes=False)
+    def hbnb_route():
+        """route handler for /hbnb endpoint"""
+        res_data = {}
+        states = storage.all('State')
+        cities = storage.all('City')
+        amenities = storage.all('Amenity')
+        places = storage.all('Place')
+        states = sorted(states.items(), key=lambda item: item[1].name)
+        cities = sorted(cities.items(), key=lambda item: item[1].name)
+        amenities = sorted(amenities.items(), key=lambda item: item[1].name)
+        places = sorted(places.items(), key=lambda item: item[1].name)
+        res_data["cities"] = cities
+        res_data["states"] = states
+        res_data["amenities"] = amenities
+        res_data["places"] = places
+        for value in res_data["places"]:
+            print(f"place: {value[1]}")
+            user = [x for x in storage.all('User').values()
+                    if x.id == value[1].user_id]
+            if user:
+                value[1].owner = f"{user[0].first_name} {user[0].last_name}"
+            else:
+                value[1].owner = ""
+            value[1].description = Markup(value[1].description)
+            print(f"place: {value[1].owner}")
+        return render_template('100-hbnb.html', data=res_data)
 
     def teardown_requests(exception=None):
         """this is the teardown function to be executed in the"""

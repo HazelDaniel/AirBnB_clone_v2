@@ -5,6 +5,7 @@
 	width: 100%;
 	border: 1px solid #DDDDDD;
 	border-radius: 4px;
+	z-index: 5;
 }
 
 .locations {
@@ -17,6 +18,9 @@
 	line-height: 20px;
 	border-right: 1px solid #DDDDDD;
 	cursor: pointer;
+}
+.locations, .amenities {
+	z-index: 4;
 }
 
 .amenities {
@@ -44,14 +48,19 @@
 	border-radius: 4px;
 	overflow: auto;
 	max-height: 300px;
+	z-index: 5;
 
 }
-.locations:hover .popover {
+
+.popover:hover {
 	display: inline-block;
+}
+.locations:hover .popover {
+	display: inline-block !important;
 }
 
 .amenities:hover .popover {
-	display: inline-block;
+	display: inline-block !important;
 }
 
 ul {

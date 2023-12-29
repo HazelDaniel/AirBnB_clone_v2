@@ -72,7 +72,8 @@ class FileStorage:
             pass
 
     def search(self, cls=None, **kwargs):
-        """  """
+        """this returns an instance of the classes with
+            the provided id"""
         objs = self.all(cls)
         for key, obj in objs:
             flag = 0
