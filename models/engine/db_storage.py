@@ -102,7 +102,7 @@ class DBStorage:
             from models.state import State
             from models.review import Review
             from models.amenity import Amenity
-            # metadata.create_all(bind=self.__engine)
+            metadata.create_all(bind=self.__engine)
             self.__session =\
                 scoped_session(sessionmaker(bind=self.__engine,
                                             expire_on_commit=False))()
