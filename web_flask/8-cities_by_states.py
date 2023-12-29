@@ -21,6 +21,7 @@ if current_directory:
     sys.path.append(flask_directory)
     subprocess.run(['bash', f"{flask_directory}/dump_fix.sh"])
     from models import storage
+    from models.state import State
 
 if storage:
     @app.route('/', strict_slashes=False)
@@ -71,7 +72,7 @@ if storage:
     @app.route('/cities_by_states')
     def handle_state_cities_list():
         """this is the route handler for the /states_list endpoint"""
-        all_states = storage.all('State')
+        all_states = storage.all(State)
         for value in all_states.values():
             # value.cities = sorted(value.cities, key=lambda x: x[1].name)
             if value.cities:

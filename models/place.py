@@ -27,15 +27,13 @@ place_amenity = Table(
         nullable=False,
     ),
 )
+if env_value == "db":
+    class Place(BaseModel, Base):
+        """A place to stay"""
 
-
-class Place(BaseModel, Base):
-    """A place to stay"""
-
-    __tablename__ = "places"
-    from models.amenity import Amenity
-    from models.review import Review
-    if env_value == "db":
+        __tablename__ = "places"
+        from models.amenity import Amenity
+        from models.review import Review
         city_id = Column(String(60), ForeignKey("cities.id"), nullable=False)
         user_id = Column(String(60), ForeignKey("users.id"), nullable=False)
         name = Column(String(128), nullable=False)
@@ -53,7 +51,10 @@ class Place(BaseModel, Base):
             back_populates="place_amenities",
             viewonly=False,
         )
-    else:
+else:
+    class Place(BaseModel):
+        """A place to stay"""
+
         city_id = ""
         user_id = ""
         name = ""
